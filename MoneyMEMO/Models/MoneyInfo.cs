@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -8,52 +9,19 @@ using System.Threading.Tasks;
 namespace MoneyMEMO.Models
 {
     public enum MoneyCategory { Income, Expense };
-    public class MoneyInfo : Services.DynamicDataBinding
+    public partial class MoneyInfo : ObservableObject
     {
         // 日期
-        private DateTime _date;
-
-        public DateTime Date
-        {
-            get => _date;
-            set
-            {
-                _date = value;
-                OnPropertyChanged(nameof(Date));
-            }
-        }
+        [ObservableProperty]
+        private DateTime date = DateTime.Now;
         // 类型
-        private MoneyCategory _category;
-        public MoneyCategory Category
-        {
-            get => _category;
-            set
-            {
-                _category = value;
-                OnPropertyChanged(nameof(Category));
-            }
-        }
+        [ObservableProperty]
+        private MoneyCategory category;
         // 金额
-        private decimal _amount;
-        public decimal Amount
-        {
-            get => _amount;
-            set
-            {
-                _amount = value;
-                OnPropertyChanged(nameof(Amount));
-            }
-        }
+        [ObservableProperty]
+        private decimal amount;
         // 备注
-        private string _note = string.Empty; 
-        public string Note
-        {
-            get => _note;
-            set
-            {
-                _note = value;
-                OnPropertyChanged(nameof(Note));
-            }
-        }
+        [ObservableProperty]
+        private string note = string.Empty; 
     }
 }
