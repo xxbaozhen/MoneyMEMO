@@ -6,13 +6,59 @@
     xmlns:local="clr-namespace:MoneyMEMO.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="Start"
-    Width="650"
-    Height="375"
+    Width="570"
+    Height="370"
     mc:Ignorable="d">
-    <Grid Margin="20">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-    </Grid>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="文件">
+                <MenuItem Header="退出" />
+            </MenuItem>
+            <MenuItem Header="编辑">
+                <MenuItem Header="添加记录" />
+                <MenuItem Header="查找记录" />
+                <MenuItem Header="删除记录" />
+            </MenuItem>
+        </Menu>
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <TextBlock
+                Grid.Row="0"
+                Margin="0,0,0,20"
+                HorizontalAlignment="Center"
+                FontSize="24"
+                FontWeight="Bold">
+                <Run Text="当前余额：" />
+                <Run Foreground="Green" Text="¥0.00" />
+            </TextBlock>
+            <DataGrid
+                Grid.Row="1"
+                AutoGenerateColumns="False"
+                CanUserAddRows="False"
+                CanUserDeleteRows="False"
+                IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding Date}"
+                        Header="日期" />
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding Category}"
+                        Header="类别" />
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding Amount}"
+                        Header="金额" />
+                    <DataGridTextColumn
+                        Width="2*"
+                        Binding="{Binding Note}"
+                        Header="备注" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </DockPanel>
 </Window>
