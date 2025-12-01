@@ -14,6 +14,13 @@ namespace MoneyMEMO.ViewModels
     {
         [ObservableProperty]
         private ObservableCollection<MoneyInfo> moneyInfos = [];
+
+        public StartViewModel()
+        {
+            moneyInfos.Add(new MoneyInfo { Date = DateTime.Now, Category = MoneyCategory.Income, Amount = 1000, Note = "Salary" });
+            moneyInfos.Add(new MoneyInfo { Date = DateTime.Now, Category = MoneyCategory.Expense, Amount = 200, Note = "Groceries" });
+        }
+
         [RelayCommand]
         private void AddRecord()
         {
