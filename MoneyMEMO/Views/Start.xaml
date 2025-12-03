@@ -50,7 +50,8 @@
                 CanUserDeleteRows="False"
                 CanUserResizeRows="False"
                 IsReadOnly="True"
-                ItemsSource="{Binding MoneyInfos}">
+                ItemsSource="{Binding MoneyInfos}"
+                SelectedItem="{Binding SelectedMoneyInfo}">
                 <DataGrid.Columns>
                     <DataGridTextColumn
                         Width="120"

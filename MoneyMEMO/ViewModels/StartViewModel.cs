@@ -14,15 +14,28 @@ namespace MoneyMEMO.ViewModels
     {
         [ObservableProperty]
         private ObservableCollection<MoneyInfo> moneyInfos = [];
+        [ObservableProperty]
+        private MoneyInfo? selectedMoneyInfo = null;
+
         [RelayCommand]
         private void AddRecord()
         {
-
+            var newRecord = new MoneyInfo
+            {
+                Date = DateTime.Now,
+                Category = MoneyCategory.Expense,
+                Amount = 0,
+                Note = string.Empty
+            };
+            MoneyInfos.Add(newRecord);
         }
         [RelayCommand]
         private void DeleteRecord()
         {
-
+            if (SelectedMoneyInfo is not null)
+            {
+                MoneyInfos.Remove(SelectedMoneyInfo);
+            }
         }
         [RelayCommand]
         private void SearchRecord()
@@ -32,7 +45,7 @@ namespace MoneyMEMO.ViewModels
         [RelayCommand]
         private void Exit()
         {
-
+            App.Current.Shutdown();
         }
     }
 }
