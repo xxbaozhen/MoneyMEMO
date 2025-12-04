@@ -4,6 +4,7 @@ using MoneyMEMO.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,7 +41,14 @@ namespace MoneyMEMO.ViewModels
         [RelayCommand]
         private void SearchRecord()
         {
-
+            var search = new Views.Search();
+            var vm = (SearchViewModel)search.DataContext;
+            vm.QueryConfirmed += query =>
+            {
+                Debug.WriteLine(query);
+                search.Close();
+            };
+            search.ShowDialog();
         }
         [RelayCommand]
         private void Exit()

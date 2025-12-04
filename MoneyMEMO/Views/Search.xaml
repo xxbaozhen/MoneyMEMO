@@ -1,0 +1,143 @@
+﻿<Window
+    x:Class="MoneyMEMO.Views.Search"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Converters="clr-namespace:MoneyMEMO.Converters"
+    xmlns:vm="clr-namespace:MoneyMEMO.ViewModels"
+    Title="查询"
+    Width="420"
+    ResizeMode="NoResize"
+    SizeToContent="Height">
+
+    <Window.Resources>
+        <Converters:BooleanToVisibilityConverter x:Key="BoolToVisible" />
+        <Converters:BoolToHiddenInverseConverter x:Key="BoolToHiddenInverse" />
+    </Window.Resources>
+
+    <Window.DataContext>
+        <vm:SearchViewModel />
+    </Window.DataContext>
+
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!--  日期  -->
+        <StackPanel Margin="0,5" Orientation="Horizontal">
+            <TextBlock
+                Width="90"
+                VerticalAlignment="Center"
+                Text="日期：" />
+
+            <!--  单日期输入  -->
+            <DatePicker
+                Width="100"
+                SelectedDate="{Binding Date}"
+                Visibility="{Binding UseDateRange, Converter={StaticResource BoolToHiddenInverse}}" />
+
+            <!--  日期区间  -->
+            <StackPanel Orientation="Horizontal" Visibility="{Binding UseDateRange, Converter={StaticResource BoolToVisible}}">
+                <DatePicker Width="100" SelectedDate="{Binding StartDate}" />
+                <TextBlock VerticalAlignment="Center" Text=" 至 " />
+                <DatePicker Width="100" SelectedDate="{Binding EndDate}" />
+            </StackPanel>
+
+            <CheckBox
+                Margin="10,0,0,0"
+                Content="区间"
+                IsChecked="{Binding UseDateRange}" />
+        </StackPanel>
+
+        <!--  金额  -->
+        <StackPanel
+            Grid.Row="1"
+            Margin="0,5"
+            Orientation="Horizontal">
+            <TextBlock
+                Width="90"
+                VerticalAlignment="Center"
+                Text="金额：" />
+
+            <!--  单金额  -->
+            <TextBox
+                Width="100"
+                PreviewKeyDown="DecimalTextBox_PreviewKeyDown"
+                PreviewTextInput="DecimalTextBox_PreviewTextInput"
+                Text="{Binding AmountText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Visibility="{Binding UseAmountRange, Converter={StaticResource BoolToHiddenInverse}}" />
+
+            <!--  金额区间  -->
+            <StackPanel Orientation="Horizontal" Visibility="{Binding UseAmountRange, Converter={StaticResource BoolToVisible}}">
+                <TextBox
+                    Width="100"
+                    PreviewKeyDown="DecimalTextBox_PreviewKeyDown"
+                    PreviewTextInput="DecimalTextBox_PreviewTextInput"
+                    Text="{Binding MinAmountText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock VerticalAlignment="Center" Text=" 至 " />
+                <TextBox
+                    Width="100"
+                    PreviewKeyDown="DecimalTextBox_PreviewKeyDown"
+                    PreviewTextInput="DecimalTextBox_PreviewTextInput"
+                    Text="{Binding MaxAmountText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+
+            <CheckBox
+                Margin="10,0,0,0"
+                Content="区间"
+                IsChecked="{Binding UseAmountRange}" />
+        </StackPanel>
+
+        <!--  类别  -->
+        <StackPanel
+            Grid.Row="2"
+            Margin="0,5"
+            Orientation="Horizontal">
+            <TextBlock
+                Width="90"
+                VerticalAlignment="Center"
+                Text="类别：" />
+            <CheckBox
+                Margin="0,0,20,0"
+                Content="收入"
+                IsChecked="{Binding IncludeIncome}" />
+            <CheckBox Content="支出" IsChecked="{Binding IncludeExpense}" />
+        </StackPanel>
+
+        <!--  备注  -->
+        <StackPanel
+            Grid.Row="3"
+            Margin="0,5"
+            Orientation="Horizontal">
+            <TextBlock
+                Width="90"
+                VerticalAlignment="Center"
+                Text="备注包含：" />
+            <TextBox Width="220" Text="{Binding NoteKeyword}" />
+        </StackPanel>
+
+        <!--  按钮  -->
+        <StackPanel
+            Grid.Row="4"
+            Margin="0,10,0,0"
+            HorizontalAlignment="Center"
+            Orientation="Horizontal">
+            <Button
+                Width="100"
+                Height="25"
+                Margin="0,0,10,0"
+                Command="{Binding ConfirmQueryCommand}"
+                Content="查询" />
+            <Button
+                Width="100"
+                Height="25"
+                Command="{Binding CancelCommand}"
+                Content="取消" />
+        </StackPanel>
+
+    </Grid>
+</Window>

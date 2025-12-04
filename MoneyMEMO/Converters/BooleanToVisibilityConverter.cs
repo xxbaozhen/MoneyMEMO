@@ -1,0 +1,33 @@
+﻿using System;
+using System.Globalization;
+using System.Windows;
+using System.Windows.Data;
+
+namespace MoneyMEMO.Converters
+{
+    public class BooleanToVisibilityConverter : IValueConverter
+    {
+        public bool Inverse { get; set; } = false;
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            bool flag = value is bool b && b;
+
+            if (Inverse)
+                flag = !flag;
+
+            return flag ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is Visibility v)
+            {
+                bool flag = v == Visibility.Visible;
+                return Inverse ? !flag : flag;
+            }
+
+            return false;
+        }
+    }
+}
