@@ -41,7 +41,8 @@
                 FontSize="24"
                 FontWeight="Bold">
                 <Run Text="当前余额：" />
-                <Run Foreground="Green" Text="¥0.00" />
+                <Run Foreground="Green" Text="$" />
+                <Run Foreground="Green" Text="{Binding MoneyCount}" />
             </TextBlock>
             <DataGrid
                 Grid.Row="1"

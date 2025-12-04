@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,8 @@ namespace MoneyMEMO.ViewModels
         private ObservableCollection<MoneyInfo> moneyInfos = [];
         [ObservableProperty]
         private MoneyInfo? selectedMoneyInfo = null;
+        [ObservableProperty]
+        private decimal moneyCount = 0.00m;
 
         [RelayCommand]
         private void AddRecord()
