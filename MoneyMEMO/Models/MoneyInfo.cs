@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MoneyMEMO.Models
 {
-    public enum MoneyCategory { Income, Expense };
+    public enum MoneyCategory { Income, Expense }; // 收入，支出
     public partial class MoneyInfo : ObservableObject
     {
         // 日期
