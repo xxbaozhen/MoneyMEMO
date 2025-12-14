@@ -11,6 +11,7 @@
     Width="570"
     Height="370"
     ResizeMode="NoResize"
+    WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <Window.Resources>
         <Converters:CategoryToStringConverter x:Key="CategoryToStringConverter" />
@@ -41,7 +42,7 @@
                 FontSize="24"
                 FontWeight="Bold">
                 <Run Text="当前余额：" />
-                <Run Foreground="Green" Text="$" />
+                <Run Foreground="Green" Text="￥" />
                 <Run Foreground="Green" Text="{Binding MoneyCount}" />
             </TextBlock>
             <DataGrid
@@ -52,11 +53,11 @@
                 CanUserResizeRows="False"
                 IsReadOnly="True"
                 ItemsSource="{Binding MoneyInfos}"
-                SelectedItem="{Binding SelectedMoneyInfo}">
+                SelectedItem="{Binding SelectedMoneyInfo, Mode=TwoWay}">
                 <DataGrid.Columns>
                     <DataGridTextColumn
                         Width="120"
-                        Binding="{Binding Date, StringFormat={}{0:yyyy-MM-dd HH:mm}}"
+                        Binding="{Binding Date, StringFormat={}{0:yyyy-MM-dd}}"
                         Header="日期" />
                     <DataGridTextColumn
                         Width="*"

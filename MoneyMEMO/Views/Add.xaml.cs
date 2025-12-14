@@ -22,7 +22,7 @@ namespace MoneyMEMO.Views
     /// </summary>
     public partial class Add : Window
     {
-        private static readonly Regex _decimalRegex = new Regex(@"^\d{0,4}(\.\d{0,2})?$");
+        private static readonly Regex _decimalRegex = new(@"^\d{0,4}(\.\d{0,2})?$");
         public Add()
         {
             InitializeComponent();

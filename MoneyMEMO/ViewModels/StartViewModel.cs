@@ -19,6 +19,7 @@ namespace MoneyMEMO.ViewModels
         [ObservableProperty]
         private ObservableCollection<MoneyInfo> moneyInfos = [];
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(DeleteRecordCommand))]
         private MoneyInfo? selectedMoneyInfo = null;
         [ObservableProperty]
         private decimal moneyCount = 0.00m;
@@ -32,19 +33,17 @@ namespace MoneyMEMO.ViewModels
         [RelayCommand]
         private void AddRecord()
         {
-            //var newRecord = new MoneyInfo
-            //{
-            //    Date = DateTime.Now,
-            //    Category = MoneyCategory.Expense,
-            //    Amount = 0,
-            //    Note = string.Empty
-            //};
-            //MoneyInfos.Add(newRecord);
             var add = new Views.Add();
             var vm = (AddViewModel)add.DataContext;
+            vm.RecordAdded += record =>
+            {
+                MoneyInfos.Add(record);
+                add.Close();
+            };
+            add.Owner = App.Current.MainWindow;
             add.ShowDialog();
         }
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanDelete))]
         private void DeleteRecord()
         {
             if (SelectedMoneyInfo is not null)
@@ -52,6 +51,7 @@ namespace MoneyMEMO.ViewModels
                 MoneyInfos.Remove(SelectedMoneyInfo);
             }
         }
+        private bool CanDelete() => SelectedMoneyInfo is not null;
         [RelayCommand]
         private void SearchRecord()
         {
@@ -61,6 +61,7 @@ namespace MoneyMEMO.ViewModels
             {
                 search.Close();
             };
+            search.Owner = App.Current.MainWindow;
             search.ShowDialog();
         }
         [RelayCommand]

@@ -7,7 +7,8 @@
     Title="查询"
     Width="420"
     ResizeMode="NoResize"
-    SizeToContent="Height">
+    SizeToContent="Height"
+    WindowStartupLocation="CenterOwner">
 
     <Window.Resources>
         <Converters:BooleanToVisibilityConverter x:Key="BoolToVisible" />

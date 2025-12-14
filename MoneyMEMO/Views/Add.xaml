@@ -8,14 +8,12 @@
     Title="添加记录"
     Width="400"
     ResizeMode="NoResize"
-    SizeToContent="Height">
+    SizeToContent="Height"
+    WindowStartupLocation="CenterOwner">
 
     <Window.DataContext>
         <vm:AddViewModel />
     </Window.DataContext>
-    <Window.Resources>
-        <Converters:CategoryToBoolConverter x:Key="CategoryToBoolConverter" />
-    </Window.Resources>
     <Grid Margin="15">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -51,7 +49,7 @@
                 Width="120"
                 PreviewKeyDown="DecimalTextBox_PreviewKeyDown"
                 PreviewTextInput="DecimalTextBox_PreviewTextInput"
-                Text="{Binding Amount}" />
+                Text="{Binding AmountText}" />
         </StackPanel>
 
         <!--  类别  -->
@@ -67,14 +65,13 @@
                 Margin="0,0,20,0"
                 Content="收入"
                 GroupName="Category"
-                IsChecked="{Binding Category, Converter={StaticResource CategoryToBoolConverter}, Mode=TwoWay}"
-                Tag="{x:Static models:MoneyCategory.Income}" />
+                IsChecked="{Binding IsIncome, Mode=TwoWay}" />
 
             <RadioButton
+                Margin="0,0,20,0"
                 Content="支出"
                 GroupName="Category"
-                IsChecked="{Binding Category, Converter={StaticResource CategoryToBoolConverter}, Mode=TwoWay}"
-                Tag="{x:Static models:MoneyCategory.Expense}" />
+                IsChecked="{Binding IsExpense, Mode=TwoWay}" />
 
         </StackPanel>
 
@@ -100,7 +97,7 @@
                 Width="100"
                 Height="25"
                 Margin="0,0,10,0"
-                Command="{Binding ConfirmQueryCommand}"
+                Command="{Binding ConfirmCommand}"
                 Content="增加" />
             <Button
                 Width="100"
