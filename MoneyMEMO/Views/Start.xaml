@@ -11,6 +11,7 @@
     Width="570"
     Height="370"
     ResizeMode="NoResize"
+    WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <Window.Resources>
         <Converters:CategoryToStringConverter x:Key="CategoryToStringConverter" />
@@ -21,12 +22,21 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="文件">
+                <MenuItem
+                    Command=""
+                    Header="新建账单"
+                    IsEnabled="False" />
+                <MenuItem Command="{Binding ResetCommand}" Header="重置数据" />
                 <MenuItem Command="{Binding ExitCommand}" Header="退出" />
             </MenuItem>
             <MenuItem Header="编辑">
                 <MenuItem Command="{Binding AddRecordCommand}" Header="添加记录" />
-                <MenuItem Command="{Binding SearchRecordCommand}" Header="查找记录" />
+                <MenuItem Command="{Binding UpdateRecordCommand}" Header="修改记录" />
                 <MenuItem Command="{Binding DeleteRecordCommand}" Header="删除记录" />
+            </MenuItem>
+            <MenuItem Header="查询">
+                <MenuItem Command="{Binding SearchRecordCommand}" Header="筛选" />
+                <MenuItem Command="{Binding ClearQueryCommand}" Header="清空筛选" />
             </MenuItem>
         </Menu>
         <Grid Margin="20">
@@ -40,8 +50,8 @@
                 HorizontalAlignment="Center"
                 FontSize="24"
                 FontWeight="Bold">
-                <Run Text="当前余额：" />
-                <Run Foreground="Green" Text="$" />
+                <Run Text="余额：" />
+                <Run Foreground="Green" Text="￥" />
                 <Run Foreground="Green" Text="{Binding MoneyCount}" />
             </TextBlock>
             <DataGrid
@@ -50,13 +60,14 @@
                 CanUserAddRows="False"
                 CanUserDeleteRows="False"
                 CanUserResizeRows="False"
+                HeadersVisibility="Column"
                 IsReadOnly="True"
-                ItemsSource="{Binding MoneyInfos}"
-                SelectedItem="{Binding SelectedMoneyInfo}">
+                ItemsSource="{Binding MoneyInfosView}"
+                SelectedItem="{Binding SelectedMoneyInfo, Mode=TwoWay}">
                 <DataGrid.Columns>
                     <DataGridTextColumn
                         Width="120"
-                        Binding="{Binding Date, StringFormat={}{0:yyyy-MM-dd HH:mm}}"
+                        Binding="{Binding Date, StringFormat={}{0:yyyy-MM-dd}}"
                         Header="日期" />
                     <DataGridTextColumn
                         Width="*"

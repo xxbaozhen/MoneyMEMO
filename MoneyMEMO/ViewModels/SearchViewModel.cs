@@ -1,17 +1,15 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MoneyMEMO.Models;
+using MoneyMEMO.Services;
 using System;
-using System.Globalization;
 using System.Windows;
 
 namespace MoneyMEMO.ViewModels
 {
-    public partial class SearchViewModel : ObservableObject
+    public partial class SearchViewModel : BaseViewModel
     {
-        // 日期
-        [ObservableProperty]
-        private DateTime? date;
+        // --- 特有属性：日期范围 ---
 
         [ObservableProperty]
         private DateTime? startDate;
@@ -22,54 +20,38 @@ namespace MoneyMEMO.ViewModels
         [ObservableProperty]
         private bool useDateRange;
 
-        partial void OnUseDateRangeChanged(bool value) // 监听 UseDateRange 变化
+        partial void OnUseDateRangeChanged(bool value)
         {
             Date = null;
             StartDate = null;
             EndDate = null;
         }
 
-        // 金额
-        [ObservableProperty]
-        private string amountText = ""; // 直接绑定 TextBox 输入
-
-        public decimal? Amount => ParseDecimal(AmountText);
+        // --- 特有属性：金额范围 ---
 
         [ObservableProperty]
         private string minAmountText = "";
-
         public decimal? MinAmount => ParseDecimal(MinAmountText);
 
         [ObservableProperty]
         private string maxAmountText = "";
-
         public decimal? MaxAmount => ParseDecimal(MaxAmountText);
 
         [ObservableProperty]
         private bool useAmountRange;
-        partial void OnUseAmountRangeChanged(bool value) // 监听 UseMountRange 变化
+
+        partial void OnUseAmountRangeChanged(bool value)
         {
             AmountText = String.Empty;
             MinAmountText = String.Empty;
             MaxAmountText = String.Empty;
         }
-        private decimal? ParseDecimal(string input)
-        {
-            if (decimal.TryParse(input, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out var val))
-                return val;
-            return null;
-        }
 
-        // 收支类型
         [ObservableProperty]
         private bool includeIncome = true;
 
         [ObservableProperty]
         private bool includeExpense = true;
-
-        // 备注搜索
-        [ObservableProperty]
-        private string? noteKeyword;
 
         // 订阅事件触发查询确认
         public event Action<SearchQuery>? QueryConfirmed;
@@ -77,22 +59,6 @@ namespace MoneyMEMO.ViewModels
         [RelayCommand]
         private void ConfirmQuery()
         {
-            if (Date == null && (StartDate == null || EndDate == null))
-            {
-                ShowError("请选择日期或日期范围！");
-                return;
-            }
-            if (string.IsNullOrEmpty(AmountText) &&
-                (string.IsNullOrWhiteSpace(MinAmountText) || string.IsNullOrWhiteSpace(MaxAmountText)))
-            {
-                ShowError("请输入金额或金额范围！");
-                return;
-            }
-            if (!IncludeIncome && !IncludeExpense)
-            {
-                ShowError("请选择至少一种收支类型！");
-                return;
-            }
             var query = new SearchQuery
             {
                 Date = this.Date,
@@ -105,23 +71,28 @@ namespace MoneyMEMO.ViewModels
                 UseDateRange = this.UseDateRange,
                 IncludeIncome = this.IncludeIncome,
                 IncludeExpense = this.IncludeExpense,
-                NoteKeyword = this.NoteKeyword ?? String.Empty
             };
+            if (query.IsEmpty)
+            {
+                MessageBox.Show("查询条件为空!\n请设置至少一个查询条件以进行查找", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
             QueryConfirmed?.Invoke(query);
         }
-        // 订阅事件触发关闭窗口
-        public event EventHandler RequestClose;
-        // 取消按钮
-        [RelayCommand]  
-        private void Cancel()
-        {
-            RequestClose?.Invoke(this, EventArgs.Empty);
-        }
 
-        // 错误弹窗
-        private void ShowError(string message)
+        // 获取外部查询条件
+        public void LoadFromQuery(SearchQuery query)
         {
-            MessageBox.Show(message, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+            this.UseAmountRange = query.UseAmountRange;
+            this.UseDateRange = query.UseDateRange;
+            this.Date = query.Date;
+            this.StartDate = query.StartDate;
+            this.EndDate = query.EndDate;
+            this.AmountText = query.Amount?.ToString() ?? String.Empty;
+            this.MinAmountText = query.MinAmount?.ToString() ?? String.Empty;
+            this.MaxAmountText = query.MaxAmount?.ToString() ?? String.Empty;
+            this.IncludeIncome = query.IncludeIncome;
+            this.IncludeExpense = query.IncludeExpense;
         }
     }
 }
