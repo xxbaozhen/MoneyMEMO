@@ -26,6 +26,10 @@ namespace MoneyMEMO.Views
         public Add()
         {
             InitializeComponent();
+            if (DataContext is AddViewModel vm)
+            {
+                vm.RequestClose += (s, e) => this.Close();
+            }
         }
         private void DecimalTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {

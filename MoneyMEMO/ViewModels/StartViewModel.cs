@@ -4,6 +4,8 @@ using MoneyMEMO.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -21,17 +23,26 @@ namespace MoneyMEMO.ViewModels
         [ObservableProperty]
         private decimal moneyCount = 0.00m;
 
+        public StartViewModel()
+        {
+            MoneyInfos.CollectionChanged += MoneyInfos_CollectionChanged;
+        }
+
+        // 命令定义
         [RelayCommand]
         private void AddRecord()
         {
-            var newRecord = new MoneyInfo
-            {
-                Date = DateTime.Now,
-                Category = MoneyCategory.Expense,
-                Amount = 0,
-                Note = string.Empty
-            };
-            MoneyInfos.Add(newRecord);
+            //var newRecord = new MoneyInfo
+            //{
+            //    Date = DateTime.Now,
+            //    Category = MoneyCategory.Expense,
+            //    Amount = 0,
+            //    Note = string.Empty
+            //};
+            //MoneyInfos.Add(newRecord);
+            var add = new Views.Add();
+            var vm = (AddViewModel)add.DataContext;
+            add.ShowDialog();
         }
         [RelayCommand]
         private void DeleteRecord()
@@ -48,7 +59,6 @@ namespace MoneyMEMO.ViewModels
             var vm = (SearchViewModel)search.DataContext;
             vm.QueryConfirmed += query =>
             {
-                Debug.WriteLine(query);
                 search.Close();
             };
             search.ShowDialog();
@@ -57,6 +67,40 @@ namespace MoneyMEMO.ViewModels
         private void Exit()
         {
             App.Current.Shutdown();
+        }
+
+        // 监听集合变化
+        private void MoneyInfos_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.NewItems != null)
+            {
+                foreach (MoneyInfo item in e.NewItems)
+                {
+                    item.PropertyChanged += MoneyInfo_PropertyChanged;
+                }
+            }
+
+            if (e.OldItems != null)
+            {
+                foreach (MoneyInfo item in e.OldItems)
+                {
+                    item.PropertyChanged -= MoneyInfo_PropertyChanged;
+                }
+            }
+
+            RecalculateTotal();
+        }
+        private void MoneyInfo_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(MoneyInfo.Amount))
+            {
+                RecalculateTotal();
+            }
+        }
+        private void RecalculateTotal()
+        {
+            decimal total = MoneyInfos.Sum(x => x.Amount * (x.Category == MoneyCategory.Income ? 1 : -1));
+            MoneyCount = total;
         }
     }
 }

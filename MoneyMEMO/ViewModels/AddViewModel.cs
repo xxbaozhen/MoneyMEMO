@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using MoneyMEMO.Models;
 using System;
 using System.Collections.Generic;
@@ -22,5 +23,19 @@ namespace MoneyMEMO.ViewModels
         // 备注
         [ObservableProperty]
         private string? noteKeyword;
+
+        // 确认添加
+        [RelayCommand]
+        private void ConfirmQuery()
+        {
+
+        }
+        // 取消添加
+        public event EventHandler RequestClose;
+        [RelayCommand]
+        private void Cancel()
+        {
+            RequestClose?.Invoke(this, EventArgs.Empty);
+        }
     }
 }
