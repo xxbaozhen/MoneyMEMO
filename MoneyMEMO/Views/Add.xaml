@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Converters="clr-namespace:MoneyMEMO.Converters"
+    xmlns:behaviors="clr-namespace:MoneyMEMO.Behaviors"
     xmlns:models="clr-namespace:MoneyMEMO.Models"
     xmlns:vm="clr-namespace:MoneyMEMO.ViewModels"
     Title="添加记录"
@@ -14,6 +15,8 @@
     <Window.DataContext>
         <vm:AddViewModel />
     </Window.DataContext>
+
+
     <Grid Margin="15">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -47,8 +50,8 @@
             <!--  单金额  -->
             <TextBox
                 Width="120"
-                PreviewKeyDown="DecimalTextBox_PreviewKeyDown"
-                PreviewTextInput="DecimalTextBox_PreviewTextInput"
+                behaviors:DecimalInputBehavior.DecimalPlaces="2"
+                behaviors:DecimalInputBehavior.IsEnabled="True"
                 Text="{Binding AmountText}" />
         </StackPanel>
 

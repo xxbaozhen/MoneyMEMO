@@ -22,12 +22,21 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="文件">
+                <MenuItem
+                    Command=""
+                    Header="新建账单"
+                    IsEnabled="False" />
+                <MenuItem Command="{Binding ResetCommand}" Header="重置数据" />
                 <MenuItem Command="{Binding ExitCommand}" Header="退出" />
             </MenuItem>
             <MenuItem Header="编辑">
                 <MenuItem Command="{Binding AddRecordCommand}" Header="添加记录" />
-                <MenuItem Command="{Binding SearchRecordCommand}" Header="查找记录" />
+                <MenuItem Command="{Binding UpdateRecordCommand}" Header="修改记录" />
                 <MenuItem Command="{Binding DeleteRecordCommand}" Header="删除记录" />
+            </MenuItem>
+            <MenuItem Header="查询">
+                <MenuItem Command="{Binding SearchRecordCommand}" Header="筛选" />
+                <MenuItem Command="{Binding ClearQueryCommand}" Header="清空筛选" />
             </MenuItem>
         </Menu>
         <Grid Margin="20">
@@ -41,7 +50,7 @@
                 HorizontalAlignment="Center"
                 FontSize="24"
                 FontWeight="Bold">
-                <Run Text="当前余额：" />
+                <Run Text="余额：" />
                 <Run Foreground="Green" Text="￥" />
                 <Run Foreground="Green" Text="{Binding MoneyCount}" />
             </TextBlock>
@@ -51,8 +60,9 @@
                 CanUserAddRows="False"
                 CanUserDeleteRows="False"
                 CanUserResizeRows="False"
+                HeadersVisibility="Column"
                 IsReadOnly="True"
-                ItemsSource="{Binding MoneyInfos}"
+                ItemsSource="{Binding MoneyInfosView}"
                 SelectedItem="{Binding SelectedMoneyInfo, Mode=TwoWay}">
                 <DataGrid.Columns>
                     <DataGridTextColumn

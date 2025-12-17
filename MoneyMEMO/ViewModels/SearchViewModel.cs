@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using MoneyMEMO.Models;
 using MoneyMEMO.Services;
 using System;
+using System.Windows;
 
 namespace MoneyMEMO.ViewModels
 {
@@ -58,25 +59,6 @@ namespace MoneyMEMO.ViewModels
         [RelayCommand]
         private void ConfirmQuery()
         {
-            if (Date == null && (StartDate == null || EndDate == null))
-            {
-                ShowError("请选择日期或日期范围！");
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(AmountText) &&
-                (string.IsNullOrWhiteSpace(MinAmountText) || string.IsNullOrWhiteSpace(MaxAmountText)))
-            {
-                ShowError("请输入金额或金额范围！");
-                return;
-            }
-
-            if (!IncludeIncome && !IncludeExpense)
-            {
-                ShowError("请选择至少一种收支类型！");
-                return;
-            }
-
             var query = new SearchQuery
             {
                 Date = this.Date,
@@ -90,7 +72,27 @@ namespace MoneyMEMO.ViewModels
                 IncludeIncome = this.IncludeIncome,
                 IncludeExpense = this.IncludeExpense,
             };
+            if (query.IsEmpty)
+            {
+                MessageBox.Show("查询条件为空!\n请设置至少一个查询条件以进行查找", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
             QueryConfirmed?.Invoke(query);
+        }
+
+        // 获取外部查询条件
+        public void LoadFromQuery(SearchQuery query)
+        {
+            this.UseAmountRange = query.UseAmountRange;
+            this.UseDateRange = query.UseDateRange;
+            this.Date = query.Date;
+            this.StartDate = query.StartDate;
+            this.EndDate = query.EndDate;
+            this.AmountText = query.Amount?.ToString() ?? String.Empty;
+            this.MinAmountText = query.MinAmount?.ToString() ?? String.Empty;
+            this.MaxAmountText = query.MaxAmount?.ToString() ?? String.Empty;
+            this.IncludeIncome = query.IncludeIncome;
+            this.IncludeExpense = query.IncludeExpense;
         }
     }
 }
